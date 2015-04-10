@@ -1,0 +1,32 @@
+{
+	"data": [
+		{
+			"question": "Wat is een hond?",
+			"tags": ["hond"]
+		},
+		{
+			"question": "Moet ik een kat of een hond?",
+			"tags": ["hond", "kat"]
+		},
+		{
+			"question": "Wat is een kat?",
+			"tags": ["kat"]
+		},
+		{
+			"question": "Hoe vaak moet ik mijn labrador uitlaten?",
+			"tags": ["hond"]
+		},
+		{
+			"question": "Ik wil mijn huisdieren aan elkaar voeren.",
+			"tags": ["muis", "kat"]
+		},
+		{
+			"question": "Wat eet een parkiet?",
+			"tags": ["vogel"]
+		},
+		{
+			"question": "Het is groen.",
+			"tags": ["kikker"]
+		}
+	]
+}
