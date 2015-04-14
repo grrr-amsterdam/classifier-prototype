@@ -1,5 +1,7 @@
 var app = require('express')();
 
+app.set('port', process.env.PORT || 3000);
+
 app.use(require('body-parser').json());
 
 app.get('/', function (req, res) {
@@ -16,5 +18,5 @@ app.post('/getTags', function (req, res) {
 	});
 });
 
-app.listen(3000);
+app.listen(app.get('port'));
 
