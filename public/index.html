@@ -8,19 +8,52 @@
 		textarea {
 			width: 100%;
 			height: 15em;
-			padding: 2em;
+			padding: 1em 1.5em;
+		}
+		input {
+			padding: 1em 1.5em;
+			width: 80%;
+		}
+		li {
+			cursor: pointer;
+			padding: 0.5em;
+
+		}
+		li:hover {
+			opacity: 0.8;
+		}
+		div {
+			display: block;
+			width: 50%;
+			float: left;
+		}
+		button {
+			float: left;
+			clear: both;
+			padding: 1em 1.5em;
 		}
 	</style>
 	</head>
 	<body>
 		<form>
-			<h1>Stel je vraag</h1>
+			<h1>Question</h1>
 
-			<textarea name="question"></textarea>
+			<textarea name="question" placeholder="Enter a question"></textarea>
 
-			<h2>Mogelijke tags</h2>
-			<ol class="possible-tags">
-			</ol>
+			<div>
+				<h2>Chosen tags</h2>
+				<ul>
+				</ul>
+			</div>
+
+			<div>
+				<h2>Possible tags</h2>
+				<input name="tag" placeholder="Enter a new tag">
+				<ol>
+				</ol>
+			</div>
+
+			<button type="submit">Save question with chosen tags</button>
 		</form>
 		<script src="script.js"></script>
 	</body>
