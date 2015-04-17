@@ -3,8 +3,7 @@ var app = require('express')();
 
 var classifier = require('./lib/classifier');
 
-var mongoURI = process.env.MONGOLAB_URI;
-
+var mongoURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017";
 mongoose.connect(mongoURI);
 
 var QuestionModel = mongoose.model('Questions', new mongoose.Schema({
