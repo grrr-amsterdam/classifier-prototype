@@ -19,6 +19,11 @@ var QuestionModel = mongoose.model('Questions', new mongoose.Schema({
 
 app.set('port', process.env.PORT || 3000);
 app.use(require('body-parser').json());
+app.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+});
 
 function getTrainingData(callback) {
 	QuestionModel.find({}).exec(function (err, result) {
