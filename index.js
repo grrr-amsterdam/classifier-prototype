@@ -20,6 +20,49 @@ var QuestionModel = mongoose.model('Questions', new mongoose.Schema({
 app.set('port', process.env.PORT || 3000);
 app.use(require('body-parser').json());
 
+function getTrainingData(callback) {
+	QuestionModel.find({}).exec(function (err, result) {
+		if (err) {
+			callback(err);
+		}
+		callback(null,
+			result.map(function (q) {
+				return {
+					question: q.body,
+					tags: q.tags
+				};
+			})
+		);
+	});
+}
+
+var trainedClassifier;
+function retrainClassifier(callback) {
+	getTrainingData(function (err, data){
+		if (err) {
+			return callback(err);
+		}
+		trainedClassifier = classifier({
+			data: data
+		});
+		callback(null);
+	});
+}
+
+var trainedAssociater;
+function retrainAssociater(callback) {
+	getTrainingData(function (err, data){
+		if (err) {
+			return callback(err);
+		}
+		trainedAssociater = associater({
+			data: data
+		});
+		callback(null);
+	});
+}
+
+
 app.get('/', function (req, res) {
 	res.sendfile('public/index.html');
 });
@@ -29,49 +72,31 @@ app.get('/script.js', function (req, res) {
 });
 
 app.get('/tags', function (req, res) {
-	QuestionModel.find({}).exec(function (err, result) {
-		if (err) {
-			res.send({data:[]});
-		}
-		var trainingData = result.map(function (q) {
-			return {
-				question: q.body,
-				tags: q.tags
-			};
+	var text = req.query.text;
+	if (text) {
+		return res.send({
+			data: trainedClassifier.getClassifications(text)
 		});
+	}
 
-		function finish(data) {
-			res.send({
-				data: data
-			});
-		}
+	var tags = req.query.tags;
+	if (tags) {
+		return res.send({
+			data: trainedAssociater.getAssociations(tags)
+		});
+	}
 
-		var text = req.query.text;
-		if (text) {
-			return finish(classifier({
-				data: trainingData
-			}).getClassifications(text));
-		}
-
-		var tags = req.query.tags;
-		if (tags) {
-			return finish(associater({
-				data: trainingData
-			}).getAssociations(tags));
-		}
-
-		finish(
-			_(trainingData)
-				.pluck('tags')
-				.flatten()
-				.uniq()
-				.map(function (tag) {
-					return {
-						label: tag
-					};
-				})
-				.value()
-		);
+	res.send({
+		data: _(trainingData)
+			.pluck('tags')
+			.flatten()
+			.uniq()
+			.map(function (tag) {
+				return {
+					label: tag
+				};
+			})
+			.value()
 	});
 });
 
@@ -96,6 +121,21 @@ app.post('/questions', function (req, res) {
 	});
 });
 
+app.get('/retrain', function(req, res) {
+	retrainClassifier(function (err) {
+		if (err) {
+			res.send({
+				status: "error"
+			});
+		}
+		retrainAssociater(function (err) {
+			res.send({
+				status: err ? "error" : "retrained"
+			});
+		});
+	});
+});
+
 app.post('/clear', function (req, res) {
 	QuestionModel.remove({}, function(err) {
 		res.send({
@@ -104,5 +144,22 @@ app.post('/clear', function (req, res) {
 	});
 });
 
-app.listen(app.get('port'));
+// Initialize AI stuff and start server
+console.log("Starting");
+retrainClassifier(function (err) {
+	if (err) {
+		console.log(err);
+		return;
+	}
+	console.log("Classifier trained");
+	retrainAssociater(function (err) {
+		if (err) {
+			console.log(err);
+			return;
+		}
+		console.log("Associater trained");
+		console.log("Launching server");
+		app.listen(app.get('port'));
+	});
+});
 
