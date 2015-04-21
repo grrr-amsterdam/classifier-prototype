@@ -91,11 +91,20 @@ app.get('/tags', function (req, res) {
 			data: _(data)
 				.pluck('tags')
 				.flatten()
-				.uniq()
 				.map(function (tag) {
 					return {
 						label: tag
 					};
+				})
+				.countBy('label')
+				.map(function (count, label) {
+					return {
+						label: label,
+						count: count
+					};
+				})
+				.sortBy(function (tag) {
+					return -tag.count;
 				})
 				.value()
 		});
@@ -160,8 +169,8 @@ retrainClassifier(function (err) {
 			return;
 		}
 		console.log("Associater trained");
-		console.log("Launching server");
 		app.listen(app.get('port'));
+		console.log("Server launched");
 	});
 });
 
