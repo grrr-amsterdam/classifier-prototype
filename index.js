@@ -86,17 +86,19 @@ app.get('/tags', function (req, res) {
 		});
 	}
 
-	res.send({
-		data: _(trainingData)
-			.pluck('tags')
-			.flatten()
-			.uniq()
-			.map(function (tag) {
-				return {
-					label: tag
-				};
-			})
-			.value()
+	getTrainingData(function (err, data) {
+		res.send({
+			data: _(data)
+				.pluck('tags')
+				.flatten()
+				.uniq()
+				.map(function (tag) {
+					return {
+						label: tag
+					};
+				})
+				.value()
+		});
 	});
 });
 

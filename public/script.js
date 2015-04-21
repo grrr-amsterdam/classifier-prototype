@@ -99,8 +99,6 @@ form.addEventListener('submit', function (e) {
 	e.preventDefault();
 	var tags = getAddedTags();
 	var question = textarea.value;
-	console.log(tags);
-	console.log(question);
 	if (!tags.length || !question) {
 		return;
 	}
