@@ -11,7 +11,11 @@ function showPossibleTags(tags) {
 
 	tags.forEach(function (tag) {
 		var li = document.createElement('li');
-		li.innerHTML = tag.label + " (" + tag.value + ")";
+		var label = tag.label;
+		if (tag.value) {
+			label += " (" + tag.value + ")";
+		}
+		li.innerHTML = label;
 		possibleTagList.appendChild(li);
 		li.addEventListener("click", function () {
 			addTag(tag.label);
@@ -58,7 +62,7 @@ function addTag(tag) {
 	chosenTagList.appendChild(li);
 }
 
-function postAndReadJSON(url, data, callback) {
+function postJSON(url, data, callback) {
 	var request = new XMLHttpRequest();
 	request.open('POST', url, true);
 	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
@@ -71,9 +75,22 @@ function postAndReadJSON(url, data, callback) {
 
 	request.send(JSON.stringify(data));
 }
+function getJSON(url, callback) {
+	var request = new XMLHttpRequest();
+	request.open('GET', url, true);
+	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+	request.onload = function() {
+		if (this.status >= 200 && this.status < 400) {
+			callback(JSON.parse(this.response));
+		}
+	};
+
+	request.send();
+}
 
 textarea.addEventListener('keyup', function () {
-	postAndReadJSON('/getTags', {question: textarea.value}, function (result) {
+	getJSON('/tags?text=' + encodeURIComponent(textarea.value), function (result) {
 		showPossibleTags(result.data);
 	});
 });
@@ -87,7 +104,7 @@ form.addEventListener('submit', function (e) {
 	if (!tags.length || !question) {
 		return;
 	}
-	postAndReadJSON('/questions', {
+	postJSON('/questions', {
 		question: question,
 		tags: getAddedTags()
 	}, function (result) {
@@ -105,3 +122,7 @@ tagInput.addEventListener('keydown', function (e) {
 	}
 });
 
+
+getJSON('/tags', function (result) {
+	showPossibleTags(result.data);
+});

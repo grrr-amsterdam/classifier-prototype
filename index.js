@@ -1,7 +1,9 @@
 var mongoose = require("mongoose");
 var app = require('express')();
+var _ = require('lodash');
 
 var classifier = require('./lib/classifier');
+var associater = require('./lib/associater');
 
 var mongoURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017";
 mongoose.connect(mongoURI);
@@ -26,22 +28,50 @@ app.get('/script.js', function (req, res) {
 	res.sendfile('public/script.js');
 });
 
-app.post('/getTags', function (req, res) {
+app.get('/tags', function (req, res) {
 	QuestionModel.find({}).exec(function (err, result) {
 		if (err) {
 			res.send({data:[]});
 		}
-		var trainingData = {
-			data: result.map(function (q) {
-				return {
-					question: q.body,
-					tags: q.tags
-				};
-			})
-		};
-		res.send({
-			data: classifier(trainingData).getClassifications(req.body.question)
+		var trainingData = result.map(function (q) {
+			return {
+				question: q.body,
+				tags: q.tags
+			};
 		});
+
+		function finish(data) {
+			res.send({
+				data: data
+			});
+		}
+
+		var text = req.query.text;
+		if (text) {
+			return finish(classifier({
+				data: trainingData
+			}).getClassifications(text));
+		}
+
+		var tags = req.query.tags;
+		if (tags) {
+			return finish(associater({
+				data: trainingData
+			}).getAssociations(tags));
+		}
+
+		finish(
+			_(trainingData)
+				.pluck('tags')
+				.flatten()
+				.uniq()
+				.map(function (tag) {
+					return {
+						label: tag
+					};
+				})
+				.value()
+		);
 	});
 });
 
