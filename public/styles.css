@@ -11,6 +11,11 @@ input {
 	padding: 1em 1.5em;
 	width: 80%;
 }
+ol {
+	max-height: 200px;
+	overflow: auto;
+	border: 1px solid #eee;
+}
 li {
 	cursor: pointer;
 	padding: 0.5em;
