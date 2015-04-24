@@ -94,6 +94,10 @@ tagInput.addEventListener('keydown', function (e) {
 	}
 });
 
+getJSON('/tags', function (result) {
+	showPossibleTags(result.data);
+});
+
 // If query param is set, prefill with existing question
 var _id = getQueryParameterByName('_id');
 if (_id) {

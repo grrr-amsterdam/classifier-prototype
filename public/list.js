@@ -7,7 +7,13 @@ getJSON('/questions', function (questions) {
 		var tagsTd = document.createElement('td');
 		var deleteTd = document.createElement('td');
 
-		var bodyHTML = '<a href="/?_id=' + question._id + '"">' + question.body.substring(0, 50) + '</a>';
+		var bodyTruncated = question.body.substring(0, 50);
+		var bodyHTML = '<a href="/?_id=' + question._id + '"">';
+		bodyHTML += bodyTruncated;
+		if (bodyTruncated.length < question.body.length) {
+			bodyHTML += "&hellip;";
+		}
+		bodyHTML += '</a>';
 		bodyTd.innerHTML = bodyHTML;
 
 		var tagsHTML = question.tags.join(', ');

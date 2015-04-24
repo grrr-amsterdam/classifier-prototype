@@ -23,7 +23,16 @@ li {
 li:hover {
 	opacity: 0.8;
 }
-div {
+
+.container {
+	width: 100%;
+}
+.container:after {
+	content:"";
+	display:table;
+	clear:both;
+}
+.container .half {
 	display: block;
 	width: 50%;
 	float: left;
@@ -60,5 +69,5 @@ button, .button {
 button:hover, .button:hover {
 	background: #ddd;
 	border-color: #aaa;
-
 }
+
