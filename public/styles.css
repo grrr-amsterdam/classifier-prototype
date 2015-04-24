@@ -34,6 +34,7 @@ table {
 }
 td {
 	border-bottom: 1px solid #eee;
+	padding: 1em;
 }
 td a {
 	display: block;
@@ -41,7 +42,7 @@ td a {
 	padding: 0.5em 0;
 }
 td.tagColumn {
-	width: 20%;
+	font-size: 12px;
 }
 
 button, .button {
