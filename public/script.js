@@ -62,33 +62,6 @@ function addTag(tag) {
 	chosenTagList.appendChild(li);
 }
 
-function postJSON(url, data, callback) {
-	var request = new XMLHttpRequest();
-	request.open('POST', url, true);
-	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-
-	request.onload = function() {
-		if (this.status >= 200 && this.status < 400) {
-			callback(JSON.parse(this.response));
-		}
-	};
-
-	request.send(JSON.stringify(data));
-}
-function getJSON(url, callback) {
-	var request = new XMLHttpRequest();
-	request.open('GET', url, true);
-	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-
-	request.onload = function() {
-		if (this.status >= 200 && this.status < 400) {
-			callback(JSON.parse(this.response));
-		}
-	};
-
-	request.send();
-}
-
 textarea.addEventListener('keyup', function () {
 	getJSON('/tags?text=' + encodeURIComponent(textarea.value), function (result) {
 		showPossibleTags(result.data);
@@ -104,7 +77,8 @@ form.addEventListener('submit', function (e) {
 	}
 	postJSON('/questions', {
 		question: question,
-		tags: getAddedTags()
+		tags: getAddedTags(),
+		_id: _id
 	}, function (result) {
 		location.reload();
 	});
@@ -120,7 +94,11 @@ tagInput.addEventListener('keydown', function (e) {
 	}
 });
 
-
-getJSON('/tags', function (result) {
-	showPossibleTags(result.data);
-});
+// If query param is set, prefill with existing question
+var _id = getQueryParameterByName('_id');
+if (_id) {
+	getJSON('/questions/' + _id, function (data) {
+		textarea.value = data.question.body;
+		data.question.tags.forEach(addTag);
+	});
+}

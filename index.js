@@ -1,9 +1,11 @@
 var mongoose = require("mongoose");
-var app = require('express')();
+var express = require('express');
 var _ = require('lodash');
 
 var classifier = require('./lib/classifier');
 var associater = require('./lib/associater');
+
+var app = express();
 
 var mongoURI = process.env.MONGOLAB_URI || "mongodb://localhost:27017";
 mongoose.connect(mongoURI);
@@ -68,13 +70,7 @@ function retrainAssociater(callback) {
 }
 
 
-app.get('/', function (req, res) {
-	res.sendfile('public/index.html');
-});
-
-app.get('/script.js', function (req, res) {
-	res.sendfile('public/script.js');
-});
+app.use(express.static('public'));
 
 app.get('/tags', function (req, res) {
 	var text = req.query.text;
@@ -125,14 +121,40 @@ app.get('/questions', function(req, res) {
 });
 
 app.post('/questions', function (req, res) {
-	var q = new QuestionModel({
-		body: req.body.question,
-		tags: req.body.tags
-	});
-
-	q.save(function (err) {
+	var saveCallback = function (err) {
 		res.send({
 			status: err ? "error" : "saved"
+		});
+	};
+	var questionData = {
+		body: req.body.question,
+		tags: req.body.tags
+	};
+
+	// Update in stead of create?
+	if (req.body._id) {
+		QuestionModel.update({
+			_id: req.body._id,
+		}, questionData, saveCallback);
+		return;
+	}
+
+	var q = new QuestionModel(questionData);
+	q.save(saveCallback);
+});
+
+app.get('/questions/:id', function(req, res) {
+	QuestionModel.find({_id: req.params.id}).exec(function (err, result) {
+		res.send({
+			question: result[0]
+		});
+	});
+});
+
+app.delete('/questions/:id', function(req, res) {
+	QuestionModel.find({_id: req.params.id}).remove(function (err) {
+		res.send({
+			status: err ? "error" : "deleted"
 		});
 	});
 });

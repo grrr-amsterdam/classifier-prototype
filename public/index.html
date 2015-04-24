@@ -1,42 +1,16 @@
 <html>
 	<head>
-	<style>
-		body {
-			padding: 5em;
-			font: 16px sans-serif;
-		}
-		textarea {
-			width: 100%;
-			height: 15em;
-			padding: 1em 1.5em;
-		}
-		input {
-			padding: 1em 1.5em;
-			width: 80%;
-		}
-		li {
-			cursor: pointer;
-			padding: 0.5em;
-		}
-		li:hover {
-			opacity: 0.8;
-		}
-		div {
-			display: block;
-			width: 50%;
-			float: left;
-		}
-		button {
-			float: left;
-			clear: both;
-			padding: 1em 1.5em;
-		}
-	</style>
+		<link rel="stylesheet" href="styles.css">
 	</head>
 	<body>
 
+		<h1>Question</h1>
+		<p>
+			<a href="/list.html" class="button">View all questions</a>
+			<button class="triggerRetrain">Retrain AI</button>
+		</p>
+
 		<form>
-			<h1>Question</h1>
 
 			<textarea name="question" placeholder="Enter a question"></textarea>
 
@@ -56,6 +30,8 @@
 			<button type="submit">Save question with chosen tags</button>
 		</form>
 
+		<script src="util.js"></script>
+		<script src="common.js"></script>
 		<script src="script.js"></script>
 
 	</body>
