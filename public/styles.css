@@ -40,6 +40,9 @@ td a {
 	width: 100%;
 	padding: 0.5em 0;
 }
+td.tagColumn {
+	width: 20%;
+}
 
 button, .button {
 	display: inline-block;

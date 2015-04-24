@@ -12,6 +12,7 @@ getJSON('/questions', function (questions) {
 
 		var tagsHTML = question.tags.join(', ');
 		tagsTd.innerHTML = tagsHTML;
+		tagsTd.classList.add('tagColumn');
 
 		var deleteButton = document.createElement('button');
 		deleteButton.innerHTML = 'Delete';

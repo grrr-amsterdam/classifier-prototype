@@ -113,11 +113,14 @@ app.get('/tags', function (req, res) {
 });
 
 app.get('/questions', function(req, res) {
-	QuestionModel.find({}).exec(function (err, result) {
-		res.send({
-			questions: result
+	QuestionModel
+		.find({})
+		.sort('body')
+		.exec(function (err, result) {
+			res.send({
+				questions: result
+			});
 		});
-	});
 });
 
 app.post('/questions', function (req, res) {
