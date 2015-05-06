@@ -197,6 +197,14 @@ app.get('/retrain', function(req, res) {
 	});
 });
 
+app.post('/accept', function(req, res) {
+	QuestionModel.update({}, { $set: { validated: true }}, {multi: true}, function(err) {
+		res.send({
+			status: err ? "error" : "accepted"
+		});
+	});
+});
+
 app.post('/clear', function (req, res) {
 	QuestionModel.remove({}, function(err) {
 		res.send({
