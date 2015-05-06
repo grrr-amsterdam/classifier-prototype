@@ -22,6 +22,12 @@ var QuestionModel = mongoose.model('Questions', new mongoose.Schema({
 	},
 	validated: {
 		type: Boolean
+	},
+	createdAt: {
+		type: Date,
+	},
+	modifiedAt: {
+		type: Date,
 	}
 }));
 
@@ -138,7 +144,8 @@ app.post('/questions', function (req, res) {
 	var questionData = {
 		body: req.body.question,
 		tags: req.body.tags,
-		validated: req.body.validated || false
+		validated: req.body.validated || false,
+		modifiedAt: new Date().getTime()
 	};
 
 	if (req.body.emotion) {
@@ -152,6 +159,8 @@ app.post('/questions', function (req, res) {
 		}, questionData, saveCallback);
 		return;
 	}
+
+	questionData.createdAt = questionData.modifiedAt;
 
 	var q = new QuestionModel(questionData);
 	q.save(saveCallback);
