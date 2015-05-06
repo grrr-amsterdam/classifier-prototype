@@ -5,6 +5,8 @@ getJSON('/questions', function (questions) {
 		var tr = document.createElement('tr');
 		var bodyTd = document.createElement('td');
 		var tagsTd = document.createElement('td');
+		var emotionTd = document.createElement('td');
+		var validatedTd = document.createElement('td');
 		var deleteTd = document.createElement('td');
 
 		var bodyTruncated = question.body.substring(0, 50);
@@ -20,6 +22,9 @@ getJSON('/questions', function (questions) {
 		tagsTd.innerHTML = tagsHTML;
 		tagsTd.classList.add('tagColumn');
 
+		emotionTd.innerHTML = question.emotion || "";
+		validatedTd.innerHTML = question.validated ? '' : 'new';
+
 		var deleteButton = document.createElement('button');
 		deleteButton.innerHTML = 'Delete';
 		deleteButton.addEventListener('click', function () {
@@ -34,6 +39,8 @@ getJSON('/questions', function (questions) {
 
 		tr.appendChild(bodyTd);
 		tr.appendChild(tagsTd);
+		tr.appendChild(emotionTd);
+		tr.appendChild(validatedTd);
 		tr.appendChild(deleteTd);
 
 		table.appendChild(tr);

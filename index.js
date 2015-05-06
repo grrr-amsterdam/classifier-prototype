@@ -16,10 +16,16 @@ var QuestionModel = mongoose.model('Questions', new mongoose.Schema({
 	},
 	tags: [
 		{type: String, trim: true}
-	]
+	],
+	emotion: {
+		type: String, trim: true
+	},
+	validated: {
+		type: Boolean
+	}
 }));
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3002);
 app.use(require('body-parser').json());
 app.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -28,7 +34,7 @@ app.use(function(req, res, next) {
 });
 
 function getTrainingData(callback) {
-	QuestionModel.find({}).exec(function (err, result) {
+	QuestionModel.find({validated: true}).exec(function (err, result) {
 		if (err) {
 			callback(err);
 		}
@@ -131,8 +137,13 @@ app.post('/questions', function (req, res) {
 	};
 	var questionData = {
 		body: req.body.question,
-		tags: req.body.tags
+		tags: req.body.tags,
+		validated: req.body.validated || false
 	};
+
+	if (req.body.emotion) {
+		questionData.emotion = req.body.emotion;
+	}
 
 	// Update in stead of create?
 	if (req.body._id) {

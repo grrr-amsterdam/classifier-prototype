@@ -1,6 +1,7 @@
 var chosenTagList = document.querySelector('ul');
 var form = document.querySelector('form');
-var tagInput = document.querySelector('input');
+var tagInput = document.querySelector('input.tag');
+var validatedInput = document.querySelector('input.validated');
 var textarea = document.querySelector('textarea');
 
 function showPossibleTags(tags) {
@@ -78,6 +79,7 @@ form.addEventListener('submit', function (e) {
 	postJSON('/questions', {
 		question: question,
 		tags: getAddedTags(),
+		validated: validatedInput.checked,
 		_id: _id
 	}, function (result) {
 		location.reload();
@@ -104,5 +106,6 @@ if (_id) {
 	getJSON('/questions/' + _id, function (data) {
 		textarea.value = data.question.body;
 		data.question.tags.forEach(addTag);
+		validatedInput.checked = data.question.validated;
 	});
 }
