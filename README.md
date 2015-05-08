@@ -21,6 +21,7 @@ All the data is communicated through a simple JSON API. Editing and other admin 
 - `cd` into the repo
 - `npm install`
 - `node .`
+- Open a browser at http://localhost:3002
 
 The app can also be easily deployed to heroku.
 
