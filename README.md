@@ -10,6 +10,20 @@ Besides relating plain text to tags, this also allows training the relationships
 
 All the data is communicated through a simple JSON API. Editing and other admin functions are provided in a bare bones web based system.
 
+## Requirements
+
+- A local MongoDB instance available on `mongodb://localhost:27017`
+- Node.js with npm
+
+## Getting started
+
+- Clone this repo
+- `cd` into the repo
+- `npm install`
+- `node .`
+
+The app can also be easily deployed to heroku.
+
 ## Tools used
 
 - node.js
