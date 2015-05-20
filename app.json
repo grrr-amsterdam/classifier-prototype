@@ -1,7 +1,0 @@
-{
-  "name": "Classifier Prototype",
-  "description": "A barebones Node.js app",
-  "repository": "https://github.com/grrr-amsterdam/classifier-prototype",
-  "logo": "http://node-js-sample.herokuapp.com/node.svg",
-  "keywords": ["node", "express", "natural"]
-}
