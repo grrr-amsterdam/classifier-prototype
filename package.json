@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grrr-amsterdam/classifier-prototype.git"
+  },
   "contributors": [
     "Larix Kortbeek <larix@grrr.nl>"
   ],
@@ -15,8 +19,8 @@
     "test": "node_modules/mocha/bin/_mocha --reporter spec --bail --check-leaks test/",
     "test-cov": "./node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Grrr",
+  "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.4",
     "natural": "^0.5.1"
